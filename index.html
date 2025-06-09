@@ -9,8 +9,6 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
     <h1 class="text-2xl font-bold text-center mb-4">Unit Converter</h1>
-    
-    <!-- Unit type selection -->
     <div class="mb-4">
       <label for="category" class="block text-sm font-medium text-gray-700">Select Unit Type</label>
       <select id="category" class="mt-1 block w-full p-2 border rounded-md" onchange="updateUnits()">
@@ -19,8 +17,6 @@
         <option value="temperature">Temperature</option>
       </select>
     </div>
-    
-    <!-- Input unit -->
     <div class="mb-4">
       <label for="fromUnit" class="block text-sm font-medium text-gray-700">From</label>
       <input type="number" id="inputValue" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter value">
@@ -31,8 +27,6 @@
         <option value="foot">Foot</option>
       </select>
     </div>
-    
-    <!-- Output unit -->
     <div class="mb-4">
       <label for="toUnit" class="block text-sm font-medium text-gray-700">To</label>
       <input type="text" id="result" class="mt-1 block w-full p-2 border rounded-md" readonly placeholder="Result">
@@ -43,12 +37,9 @@
         <option value="foot">Foot</option>
       </select>
     </div>
-    
     <button onclick="convert()" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Convert</button>
   </div>
-
   <script>
-    // Conversion logic
     const conversions = {
       length: {
         meter: { toMeter: 1, label: 'Meter' },
@@ -67,50 +58,36 @@
         fahrenheit: { label: 'Fahrenheit' }
       }
     };
-
-    // Update unit dropdowns
     function updateUnits() {
       const category = document.getElementById('category').value;
       const fromUnit = document.getElementById('fromUnit');
       const toUnit = document.getElementById('toUnit');
-      
-      // Clear dropdowns
       fromUnit.innerHTML = '';
       toUnit.innerHTML = '';
-      
-      // Populate units based on category
       for (let unit in conversions[category]) {
         const option1 = document.createElement('option');
         option1.value = unit;
         option1.text = conversions[category][unit].label;
         fromUnit.appendChild(option1);
-        
         const option2 = document.createElement('option');
         option2.value = unit;
         option2.text = conversions[category][unit].label;
         toUnit.appendChild(option2);
       }
     }
-
-    // Initialize units
     updateUnits();
-
-    // Conversion function
     function convert() {
       const category = document.getElementById('category').value;
       const inputValue = parseFloat(document.getElementById('inputValue').value);
       const fromUnit = document.getElementById('fromUnit').value;
       const toUnit = document.getElementById('toUnit').value;
       const resultField = document.getElementById('result');
-
       if (isNaN(inputValue)) {
         resultField.value = 'Please enter a valid number';
         return;
       }
-
       let result;
       if (category === 'temperature') {
-        // Temperature conversions
         if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
           result = (inputValue * 9/5) + 32;
         } else if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
@@ -119,11 +96,9 @@
           result = inputValue;
         }
       } else {
-        // Length and weight conversions
         const baseValue = inputValue * (category === 'length' ? conversions[category][fromUnit].toMeter : conversions[category][fromUnit].toKilogram);
         result = baseValue / (category === 'length' ? conversions[category][toUnit].toMeter : conversions[category][toUnit].toKilogram);
       }
-
       resultField.value = result.toFixed(4);
     }
   </script>
