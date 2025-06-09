@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -118,4 +79,53 @@
       toUnit.innerHTML = '';
       
       // Populate units based on category
-      for (let unit in conversions[
+      for (let unit in conversions[category]) {
+        const option1 = document.createElement('option');
+        option1.value = unit;
+        option1.text = conversions[category][unit].label;
+        fromUnit.appendChild(option1);
+        
+        const option2 = document.createElement('option');
+        option2.value = unit;
+        option2.text = conversions[category][unit].label;
+        toUnit.appendChild(option2);
+      }
+    }
+
+    // Initialize units
+    updateUnits();
+
+    // Conversion function
+    function convert() {
+      const category = document.getElementById('category').value;
+      const inputValue = parseFloat(document.getElementById('inputValue').value);
+      const fromUnit = document.getElementById('fromUnit').value;
+      const toUnit = document.getElementById('toUnit').value;
+      const resultField = document.getElementById('result');
+
+      if (isNaN(inputValue)) {
+        resultField.value = 'Please enter a valid number';
+        return;
+      }
+
+      let result;
+      if (category === 'temperature') {
+        // Temperature conversions
+        if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
+          result = (inputValue * 9/5) + 32;
+        } else if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
+          result = (inputValue - 32) * 5/9;
+        } else {
+          result = inputValue;
+        }
+      } else {
+        // Length and weight conversions
+        const baseValue = inputValue * (category === 'length' ? conversions[category][fromUnit].toMeter : conversions[category][fromUnit].toKilogram);
+        result = baseValue / (category === 'length' ? conversions[category][toUnit].toMeter : conversions[category][toUnit].toKilogram);
+      }
+
+      resultField.value = result.toFixed(4);
+    }
+  </script>
+</body>
+</html>
