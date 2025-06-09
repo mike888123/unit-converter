@@ -3,179 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unit Converter</title>
+  <title>Feet + Inches to Centimeters Converter</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="w-full max-w-4xl p-6">
-    <h1 class="text-3xl font-bold text-center mb-8">Unit Converter</h1>
-    <div class="flex flex-col md:flex-row gap-6">
-      <!-- Temperature Box -->
-      <div class="bg-white p-6 rounded-lg shadow-lg flex-1">
-        <h2 class="text-xl font-semibold mb-4">Temperature</h2>
-        <div class="mb-4">
-          <label for="tempInput" class="block text-sm font-medium text-gray-700">Value</label>
-          <input type="number" id="tempInput" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter value">
-        </div>
-        <div class="mb-4">
-          <label for="tempFrom" class="block text-sm font-medium text-gray-700">From</label>
-          <select id="tempFrom" class="mt-1 block w-full p-2 border rounded-md"></select>
-        </div>
-        <div class="mb-4">
-          <label for="tempTo" class="block text-sm font-medium text-gray-700">To</label>
-          <select id="tempTo" class="mt-1 block w-full p-2 border rounded-md"></select>
-        </div>
-        <div class="mb-4">
-          <label for="tempResult" class="block text-sm font-medium text-gray-700">Result</label>
-          <input type="text" id="tempResult" class="mt-1 block w-full p-2 border rounded-md" readonly placeholder="Result">
-        </div>
-        <button onclick="convert('temperature')" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Convert</button>
-      </div>
-
-      <!-- Weight Box -->
-      <div class="bg-white p-6 rounded-lg shadow-lg flex-1">
-        <h2 class="text-xl font-semibold mb-4">Weight</h2>
-        <div class="mb-4">
-          <label for="weightInput" class="block text-sm font-medium text-gray-700">Value</label>
-          <input type="number" id="weightInput" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter value">
-        </div>
-        <div class="mb-4">
-          <label for="weightFrom" class="block text-sm font-medium text-gray-700">From</label>
-          <select id="weightFrom" class="mt-1 block w-full p-2 border rounded-md"></select>
-        </div>
-        <div class="mb-4">
-          <label for="weightTo" class="block text-sm font-medium text-gray-700">To</label>
-          <select id="weightTo" class="mt-1 block w-full p-2 border rounded-md"></select>
-        </div>
-        <div class="mb-4">
-          <label for="weightResult" class="block text-sm font-medium text-gray-700">Result</label>
-          <input type="text" id="weightResult" class="mt-1 block w-full p-2 border rounded-md" readonly placeholder="Result">
-        </div>
-        <button onclick="convert('weight')" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Convert</button>
-      </div>
-
-      <!-- Length Box -->
-      <div class="bg-white p-6 rounded-lg shadow-lg flex-1">
-        <h2 class="text-xl font-semibold mb-4">Length</h2>
-        <div class="mb-4">
-          <label for="lengthInput" class="block text-sm font-medium text-gray-700">Value</label>
-          <input type="number" id="lengthInput" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter value">
-        </div>
-        <div class="mb-4">
-          <label for="lengthFrom" class="block text-sm font-medium text-gray-700">From</label>
-          <select id="lengthFrom" class="mt-1 block w-full p-2 border rounded-md"></select>
-        </div>
-        <div class="mb-4">
-          <label for="lengthTo" class="block text-sm font-medium text-gray-700">To</label>
-          <select id="lengthTo" class="mt-1 block w-full p-2 border rounded-md"></select>
-        </div>
-        <div class="mb-4">
-          <label for="lengthResult" class="block text-sm font-medium text-gray-700">Result</label>
-          <input type="text" id="lengthResult" class="mt-1 block w-full p-2 border rounded-md" readonly placeholder="Result">
-        </div>
-        <button onclick="convert('length')" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Convert</button>
-      </div>
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-4">Feet + Inches to CM Converter</h1>
+    
+    <!-- Conversion Direction -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Conversion Type</label>
+      <select id="direction" class="mt-1 block w-full p-2 border rounded-md" onchange="updateInputs()">
+        <option value="toCm">Feet + Inches to Centimeters</option>
+        <option value="toFeetInch">Centimeters to Feet + Inches</option>
+      </select>
     </div>
+    
+    <!-- Input Fields -->
+    <div id="toCmInputs" class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Feet</label>
+      <input type="number" id="feet" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter feet (e.g., 5)" step="any">
+      <label class="block text-sm font-medium text-gray-700 mt-2">Inches</label>
+      <input type="number" id="inches" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter inches (e.g., 6)" step="any">
+    </div>
+    <div id="toFeetInchInputs" class="mb-4 hidden">
+      <label class="block text-sm font-medium text-gray-700">Centimeters</label>
+      <input type="number" id="cm" class="mt-1 block w-full p-2 border rounded-md" placeholder="Enter cm (e.g., 170)" step="any">
+    </div>
+    
+    <!-- Amazon FBA Option -->
+    <div class="mb-4">
+      <label class="flex items-center">
+        <input type="checkbox" id="fbaCheck" class="mr-2">
+        <span class="text-sm font-medium text-gray-700">Check Amazon FBA Size</span>
+      </label>
+    </div>
+    
+    <!-- Result -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Result</label>
+      <input type="text" id="result" class="mt-1 block w-full p-2 border rounded-md" readonly placeholder="Result">
+    </div>
+    
+    <button onclick="convert()" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Convert</button>
   </div>
 
   <script>
-    // Conversion logic
-    const conversions = {
-      length: {
-        meter: { toMeter: 1, label: 'Meter' },
-        centimeter: { toMeter: 0.01, label: 'Centimeter' },
-        inch: { toMeter: 0.0254, label: 'Inch' },
-        foot: { toMeter: 0.3048, label: 'Foot' }
-      },
-      weight: {
-        kilogram: { toKilogram: 1, label: 'Kilogram' },
-        gram: { toKilogram: 0.001, label: 'Gram' },
-        pound: { toKilogram: 0.453592, label: 'Pound' },
-        ounce: { toKilogram: 0.0283495, label: 'Ounce' }
-      },
-      temperature: {
-        celsius: { label: 'Celsius' },
-        fahrenheit: { label: 'Fahrenheit' }
-      }
-    };
-
-    // Populate unit dropdowns
-    function populateUnits() {
-      // Temperature
-      const tempFrom = document.getElementById('tempFrom');
-      const tempTo = document.getElementById('tempTo');
-      for (let unit in conversions.temperature) {
-        const option1 = document.createElement('option');
-        option1.value = unit;
-        option1.text = conversions.temperature[unit].label;
-        tempFrom.appendChild(option1);
-        const option2 = document.createElement('option');
-        option2.value = unit;
-        option2.text = conversions.temperature[unit].label;
-        tempTo.appendChild(option2);
-      }
-
-      // Weight
-      const weightFrom = document.getElementById('weightFrom');
-      const weightTo = document.getElementById('weightTo');
-      for (let unit in conversions.weight) {
-        const option1 = document.createElement('option');
-        option1.value = unit;
-        option1.text = conversions.weight[unit].label;
-        weightFrom.appendChild(option1);
-        const option2 = document.createElement('option');
-        option2.value = unit;
-        option2.text = conversions.weight[unit].label;
-        weightTo.appendChild(option2);
-      }
-
-      // Length
-      const lengthFrom = document.getElementById('lengthFrom');
-      const lengthTo = document.getElementById('lengthTo');
-      for (let unit in conversions.length) {
-        const option1 = document.createElement('option');
-        option1.value = unit;
-        option1.text = conversions.length[unit].label;
-        lengthFrom.appendChild(option1);
-        const option2 = document.createElement('option');
-        option2.value = unit;
-        option2.text = conversions.length[unit].label;
-        lengthTo.appendChild(option2);
-      }
+    function updateInputs() {
+      const direction = document.getElementById('direction').value;
+      document.getElementById('toCmInputs').classList.toggle('hidden', direction !== 'toCm');
+      document.getElementById('toFeetInchInputs').classList.toggle('hidden', direction !== 'toFeetInch');
+      document.getElementById('result').value = '';
     }
 
-    // Initialize dropdowns
-    populateUnits();
+    function convert() {
+      const direction = document.getElementById('direction').value;
+      const resultField = document.getElementById('result');
+      const fbaCheck = document.getElementById('fbaCheck').checked;
 
-    // Conversion function
-    function convert(category) {
-      const input = document.getElementById(`${category === 'temperature' ? 'temp' : category}Input`);
-      const fromUnit = document.getElementById(`${category === 'temperature' ? 'temp' : category}From`).value;
-      const toUnit = document.getElementById(`${category === 'temperature' ? 'temp' : category}To`).value;
-      const resultField = document.getElementById(`${category === 'temperature' ? 'temp' : category}Result`);
-
-      const inputValue = parseFloat(input.value);
-      if (isNaN(inputValue)) {
-        resultField.value = 'Please enter a valid number';
-        return;
-      }
-
-      let result;
-      if (category === 'temperature') {
-        if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
-          result = (inputValue * 9/5) + 32;
-        } else if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
-          result = (inputValue - 32) * 5/9;
-        } else {
-          result = inputValue;
+      if (direction === 'toCm') {
+        const feet = parseFloat(document.getElementById('feet').value) || 0;
+        const inches = parseFloat(document.getElementById('inches').value) || 0;
+        if (isNaN(feet) && isNaN(inches)) {
+          resultField.value = '请输入有效数字';
+          return;
         }
+        const totalCm = (feet * 30.48) + (inches * 2.54);
+        let result = `${totalCm.toFixed(4)} cm`;
+        if (fbaCheck) {
+          const size = totalCm <= 45.72 ? 'Standard Size' : 'Oversize';
+          result += ` (Amazon FBA: ${size})`;
+        }
+        resultField.value = result;
       } else {
-        const baseValue = inputValue * (category === 'length' ? conversions[category][fromUnit].toMeter : conversions[category][fromUnit].toKilogram);
-        result = baseValue / (category === 'length' ? conversions[category][toUnit].toMeter : conversions[category][toUnit].toKilogram);
+        const cm = parseFloat(document.getElementById('cm').value);
+        if (isNaN(cm)) {
+          resultField.value = '请输入有效数字';
+          return;
+        }
+        const totalInches = cm / 2.54;
+        const feet = Math.floor(totalInches / 12);
+        const inches = (totalInches % 12).toFixed(2);
+        let result = `${feet} ft ${inches} in`;
+        if (fbaCheck) {
+          const size = cm <= 45.72 ? 'Standard Size' : 'Oversize';
+          result += ` (Amazon FBA: ${size})`;
+        }
+        resultField.value = result;
       }
-
-      resultField.value = result.toFixed(4);
     }
+
+    // Initialize inputs
+    updateInputs();
   </script>
 </body>
 </html>
